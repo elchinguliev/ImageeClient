@@ -69,7 +69,7 @@ namespace ImageeClient
 
                         if (socket.Connected)
                         {
-                            serverInfoLbl.Content = "Connected Server . . .";
+                            serverInfoLbl.Content = "Connected loading...";
                             var bytes = getJPGFromImageControl(Imagee.Source as BitmapImage);
                             socket.Send(bytes);
                         }
@@ -81,7 +81,7 @@ namespace ImageeClient
                 }
                 else
                 {
-                    MessageBox.Show("Please select a photo !", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Please select a photo !");
                 }
             });
         }
