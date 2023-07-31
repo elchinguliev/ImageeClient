@@ -53,33 +53,37 @@ namespace ImageeClient
         }
         private void SendToClick_Click(object sender, RoutedEventArgs e)
         {
-            if (Imagee.Source != null)
+            Task.Run(() =>
             {
-                var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                var ipAddress = IPAddress.Parse("192.168.1.106");
-                var port = 80;
-                var ep = new IPEndPoint(ipAddress, port);
 
-                try
+                if (Imagee.Source != null)
                 {
-                    socket.Connect(ep);
+                    var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    var ipAddress = IPAddress.Parse("10.1.18.7");
+                    var port = 27001;
+                    var ep = new IPEndPoint(ipAddress, port);
 
-                    if (socket.Connected)
+                    try
                     {
-                        serverInfoLbl.Content = "Connected Server . . .";
-                        var bytes = getJPGFromImageControl(Imagee.Source as BitmapImage);
-                        socket.Send(bytes);
+                        socket.Connect(ep);
+
+                        if (socket.Connected)
+                        {
+                            serverInfoLbl.Content = "Connected Server . . .";
+                            var bytes = getJPGFromImageControl(Imagee.Source as BitmapImage);
+                            socket.Send(bytes);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        serverInfoLbl.Content = ex.Message;
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    serverInfoLbl.Content = ex.Message;
+                    MessageBox.Show("Please select a photo !", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
-            }
-            else
-            {
-                MessageBox.Show("Please select a photo !", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            });
         }
     }
 }
