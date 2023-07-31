@@ -53,8 +53,6 @@ namespace ImageeClient
         }
         private void SendToClick_Click(object sender, RoutedEventArgs e)
         {
-    
-
                 if (Imagee.Source != null)
                 {
                     var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -82,7 +80,6 @@ namespace ImageeClient
                 {
                     MessageBox.Show("Please select a photo !");
                 }
-        
         }
     }
 }
