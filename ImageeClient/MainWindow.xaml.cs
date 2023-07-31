@@ -59,13 +59,13 @@ namespace ImageeClient
                 if (Imagee.Source != null)
                 {
                     var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    var ipAddress = IPAddress.Parse("10.1.18.7");
+                    var ip = IPAddress.Parse("10.1.18.7");
                     var port = 27001;
-                    var ep = new IPEndPoint(ipAddress, port);
+                    var endPoint = new IPEndPoint(ip, port);
 
                     try
                     {
-                        socket.Connect(ep);
+                        socket.Connect(endPoint);
 
                         if (socket.Connected)
                         {
