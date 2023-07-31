@@ -53,8 +53,7 @@ namespace ImageeClient
         }
         private void SendToClick_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(() =>
-            {
+    
 
                 if (Imagee.Source != null)
                 {
@@ -83,7 +82,7 @@ namespace ImageeClient
                 {
                     MessageBox.Show("Please select a photo !");
                 }
-            });
+        
         }
     }
 }
