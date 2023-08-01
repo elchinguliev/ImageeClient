@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ImageeClient
 {
@@ -24,13 +25,23 @@ namespace ImageeClient
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public OpenFileDialog openFileDialog = new OpenFileDialog();
+        private BitmapImage image;
+
+        public BitmapImage Image
+        {
+            get { return image; }
+            set { image = value; }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+
         }
 
- 
+
 
         private void ChooseImage_Click_1(object sender, RoutedEventArgs e)
         {
@@ -53,33 +64,30 @@ namespace ImageeClient
         }
         private void SendToClick_Click(object sender, RoutedEventArgs e)
         {
-                if (Imagee.Source != null)
+            var ipAdress = IPAddress.Parse("192.168.1.106");
+            var port = 27001;
+
+            Task.Run(() =>
+            {
+                var ep = new IPEndPoint(ipAdress, port);
+
+                try
                 {
                     var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    var ip = IPAddress.Parse("10.1.18.7");
-                    var port = 27001;
-                    var endPoint = new IPEndPoint(ip, port);
+                    socket.Connect(ep);
 
-                    try
+                    if (socket.Connected)
                     {
-                        socket.Connect(endPoint);
-
-                        if (socket.Connected)
-                        {
-                            serverInfoLbl.Content = "Connected loading...";
-                            var bytes = getJPGFromImageControl(Imagee.Source as BitmapImage);
-                            socket.Send(bytes);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        serverInfoLbl.Content = ex.Message;
+                        var sendImage = Image;
+                        var bytes = getJPGFromImageControl(Image);
+                        socket.Send(bytes);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Please select a photo !");
+                    MessageBox.Show($"{ex.Message}");
                 }
+            });
         }
     }
 }
